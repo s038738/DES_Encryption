@@ -20,6 +20,7 @@ import javax.crypto.spec.DESKeySpec;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +30,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -53,11 +57,14 @@ public class MainFrame extends JFrame {
 
 
 
+
     public MainFrame(){
         setContentPane(mainPanel);
         setSize(400,400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+        ECBRadioButton.setSelected(true);
+        choise = 1;
         encryptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,21 +76,29 @@ public class MainFrame extends JFrame {
                 }catch (Exception exep){
                     exep.printStackTrace();
                 }
+                if (choise == 1) {
+                    try {
+                        System.out.println("ECB Encryption text");
 
-                try {
-                    System.out.println("Encryption text");
+                        FileInputStream fis = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\original.txt");
+                        FileOutputStream fos = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        encrypt(key, fis, fos);
 
-                    FileInputStream fis = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\original.txt");
-                    FileOutputStream fos = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
-                    encrypt(key, fis, fos);
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
+                }else if (choise == 2){
+                    try {
+                        System.out.println("CBC Encryption text");
 
-                } catch (Throwable ex) {
-                    ex.printStackTrace();
+                        FileInputStream fis = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\original.txt");
+                        FileOutputStream fos = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        encryptCBC(key, fis, fos);
+
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
                 }
-
-
-
-
                 FileInputStream stream = null;
                 try {
                     stream = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
@@ -114,11 +129,6 @@ public class MainFrame extends JFrame {
                     }
                 }
 
-
-
-
-
-
             }
         });
         decryptButton.addActionListener(new ActionListener() {
@@ -127,20 +137,31 @@ public class MainFrame extends JFrame {
                 text = textField1.getText();
                 key = textField2.getText();
 
-                try (PrintStream out = new PrintStream(new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt"))) {
+                try (PrintStream out = new PrintStream(new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\ecrypted2.txt"))) {
                     out.print(text);
                 }catch (Exception exep){
                     exep.printStackTrace();
                 }
+                if(choise == 1) {
+                    try {
+                        System.out.println("ECB Decryption text");
+                        FileInputStream fis2 = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\ecrypted2.txt");
+                        FileOutputStream fos2 = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\decrypted.txt");
+                        decrypt(key, fis2, fos2);
 
-                try {
-                    System.out.println("Decryption text");
-                    FileInputStream fis2 = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
-                    FileOutputStream fos2 = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\decrypted.txt");
-                    decrypt(key, fis2, fos2);
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
+                }else if (choise == 2){
+                    try {
+                        System.out.println("CBC Decryption text");
+                        FileInputStream fis2 = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        FileOutputStream fos2 = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\decrypted.txt");
+                        decryptCBC(key, fis2, fos2);
 
-                } catch (Throwable ex) {
-                    ex.printStackTrace();
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 FileInputStream stream = null;
@@ -163,9 +184,6 @@ public class MainFrame extends JFrame {
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 } finally {
-                    // Potential issue here: if this throws an IOException,
-                    // it will mask any others. Normally I'd use a utility
-                    // method which would log exceptions and swallow them
                     try {
                         stream.close();
                     } catch (IOException ex) {
@@ -179,14 +197,30 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 key = textField2.getText();
-                try {
-                    System.out.println("Encryption file");
-                    FileInputStream fis = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\original.txt");
-                    FileOutputStream fos = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
-                    encrypt(key, fis, fos);
-                    MessageLabel.setText("Encryption Done");
-                } catch (Throwable ex) {
-                    ex.printStackTrace();
+                if (choise == 1) {
+                    try {
+                        System.out.println("ECB Encryption text");
+
+                        FileInputStream fis = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\original.txt");
+                        FileOutputStream fos = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        encrypt(key, fis, fos);
+                        MessageLabel.setText("Encryption done");
+
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
+                }else if (choise == 2){
+                    try {
+                        System.out.println("CBC Encryption text");
+
+                        FileInputStream fis = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\original.txt");
+                        FileOutputStream fos = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        encryptCBC(key, fis, fos);
+                        MessageLabel.setText("Encryption done");
+
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -194,15 +228,48 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 key = textField2.getText();
-                try {
-                    System.out.println("Decryption file");
-                    FileInputStream fis2 = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
-                    FileOutputStream fos2 = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\decrypted.txt");
-                    decrypt(key, fis2, fos2);
-                    MessageLabel.setText("Decryption Done");
-                } catch (Throwable ex) {
-                    ex.printStackTrace();
+                if(choise == 1) {
+                    try {
+                        System.out.println("ECB Decryption text");
+                        FileInputStream fis2 = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        FileOutputStream fos2 = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\decrypted.txt");
+                        decrypt(key, fis2, fos2);
+                        MessageLabel.setText("Decription Done");
+
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
+                }else if (choise == 2){
+                    try {
+                        System.out.println("CBC Decryption text");
+                        FileInputStream fis2 = new FileInputStream("D:\\VIKO\\4sem\\IS\\2\\src\\encrypted.txt");
+                        FileOutputStream fos2 = new FileOutputStream("D:\\VIKO\\4sem\\IS\\2\\src\\decrypted.txt");
+                        decryptCBC(key, fis2, fos2);
+                        MessageLabel.setText("Decription Done");
+
+                    } catch (Throwable ex) {
+                        ex.printStackTrace();
+                    }
                 }
+            }
+        });
+        ECBRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CBCRadioButton.setSelected(false);
+                ECBRadioButton.setSelected(true);
+                choise = 1;
+                //System.out.println(choise);
+
+            }
+        });
+        CBCRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CBCRadioButton.setSelected(true);
+                ECBRadioButton.setSelected(false);
+                choise = 2;
+                //System.out.println(choise);
             }
         });
     }
@@ -244,5 +311,54 @@ public class MainFrame extends JFrame {
         is.close();
         System.out.println("Done");
     }
+
+
+
+    public static void encryptOrDecryptCBC(String key, int mode, InputStream is, OutputStream os) throws Throwable {
+
+        DESKeySpec dks = new DESKeySpec(key.getBytes());
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("DES");
+        SecretKey desKey = skf.generateSecret(dks);
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding"); // DES/ECB/PKCS5Padding for SunJCE
+
+        byte[] ivBytes = new byte[8];
+        IvParameterSpec iv = new IvParameterSpec(ivBytes);
+
+        if (mode == Cipher.ENCRYPT_MODE) {
+            cipher.init(Cipher.ENCRYPT_MODE, desKey, iv);
+            CipherInputStream cis = new CipherInputStream(is, cipher);
+            doCopy(cis, os);
+        } else if (mode == Cipher.DECRYPT_MODE) {
+            cipher.init(Cipher.DECRYPT_MODE, desKey, iv);
+            CipherOutputStream cos = new CipherOutputStream(os, cipher);
+            doCopy(is, cos);
+        }
+    }
+
+
+    public static void encryptCBC(String key, InputStream is, OutputStream os) throws Throwable {
+        encryptOrDecryptCBC(key, Cipher.ENCRYPT_MODE, is, os);
+    }
+
+    public static void decryptCBC(String key, InputStream is, OutputStream os) throws Throwable {
+        encryptOrDecryptCBC(key, Cipher.DECRYPT_MODE, is, os);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
