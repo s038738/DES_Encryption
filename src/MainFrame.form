@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="MainFrame">
-  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="11" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="12" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="18" y="19" width="446" height="319"/>
+      <xy x="18" y="19" width="446" height="344"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -107,11 +107,35 @@
       </component>
       <component id="f1f0a" class="javax.swing.JTextField" binding="textField3" default-binding="true">
         <constraints>
-          <grid row="10" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="11" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
         <properties/>
+      </component>
+      <component id="aa09a" class="javax.swing.JRadioButton" binding="PCBCRadioButton" default-binding="true">
+        <constraints>
+          <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="PCBC"/>
+        </properties>
+      </component>
+      <component id="eb8c7" class="javax.swing.JRadioButton" binding="CFBRadioButton" default-binding="true">
+        <constraints>
+          <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="CFB"/>
+        </properties>
+      </component>
+      <component id="75270" class="javax.swing.JRadioButton" binding="OFBRadioButton" default-binding="true">
+        <constraints>
+          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="OFB"/>
+        </properties>
       </component>
     </children>
   </grid>
